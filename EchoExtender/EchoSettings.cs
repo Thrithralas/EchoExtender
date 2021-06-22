@@ -1,17 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace EchoExtender {
     public struct EchoSettings {
         public float EchoSizeMultiplier;
-        public int EffectRadius;
+        public float EffectRadius;
         public bool RequirePriming;
         public int MinimumKarma;
         public int MinimumKarmaCap;
-        public bool RequireHunter;
+        public int[] SpawnOnDifficulty;
+        public string EchoSong;
 
-        public static EchoSettings Default => new EchoSettings {EchoSizeMultiplier = 1f, EffectRadius = 1, MinimumKarma = 0, MinimumKarmaCap = 0, RequirePriming = false, RequireHunter = false};
+        public static EchoSettings Default => new EchoSettings {EchoSizeMultiplier = 1f, EffectRadius = 1, MinimumKarma = 0, MinimumKarmaCap = 0, RequirePriming = false, SpawnOnDifficulty = new[] {0, 1, 2}, EchoSong = "NA_34 - Else3"};
 
         public static EchoSettings FromFile(string path) {
             Debug.Log("[Echo Extender : Info] Found settings file: " + path);
@@ -26,7 +28,7 @@ namespace EchoExtender {
                             settings.EchoSizeMultiplier = float.Parse(split[1]);
                             break;
                         case "radius":
-                            settings.EffectRadius = int.Parse(split[1]);
+                            settings.EffectRadius = float.Parse(split[1]);
                             break;
                         case "priming":
                             settings.RequirePriming = bool.Parse(split[1]);
@@ -37,8 +39,12 @@ namespace EchoExtender {
                         case "minkarmacap":
                             settings.MinimumKarmaCap = int.Parse(split[1]);
                             break;
-                        case "hunteronly":
-                            settings.RequireHunter = bool.Parse(split[1]);
+                        case "difficulties":
+                            settings.SpawnOnDifficulty = split[1].Split(',').Select(s => int.Parse(s.Trim())).ToArray();
+                            break;
+                        case "echosong":
+                            string trimmed = split[1].Trim();
+                            settings.EchoSong = CRSEchoParser.EchoSongs.TryGetValue(trimmed, out string song) ? song : trimmed;
                             break;
                     }
                 }

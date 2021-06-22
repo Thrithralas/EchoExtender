@@ -14,6 +14,15 @@ namespace EchoExtender {
         public static readonly Dictionary<string, string> EchoLocations = new Dictionary<string, string>();
         public static readonly Dictionary<GhostWorldPresence.GhostID, EchoSettings> EchoSettings = new Dictionary<GhostWorldPresence.GhostID, EchoSettings>();
 
+        public static readonly Dictionary<string, string> EchoSongs = new Dictionary<string, string> {
+            {"CC", "NA_32 - Else1"},
+            {"SI", "NA_38 - Else7"},
+            {"LF", "NA_36 - Else5"},
+            {"SH", "NA_34 - Else3"},
+            {"UW", "NA_35 - Else4"},
+            {"SB", "NA_33 - Else2"}
+        };
+
         public static GhostWorldPresence.GhostID GetEchoID(string regionShort) => (GhostWorldPresence.GhostID) Enum.Parse(typeof(GhostWorldPresence.GhostID), regionShort);
         public static Conversation.ID GetConversationID(string regionShort) => (Conversation.ID) Enum.Parse(typeof(Conversation.ID), "Ghost_" + regionShort);
         public static bool EchoIDExists(string regionShort) {
