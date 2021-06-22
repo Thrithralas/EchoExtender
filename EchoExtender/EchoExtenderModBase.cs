@@ -20,16 +20,8 @@ namespace EchoExtender {
             On.PlayerProgression.GetOrInitiateSaveState += PlayerProgressionOnGetOrInitiateSaveState;
             On.RainWorld.Start += RainWorldOnStart;
 
-            On.PoleMimic.Update += (orig, self, eu) => {
-                if (self.room.abstractRoom.creatures.Count == 0) Debug.Log("EMPTY");
-                try {
-                    orig(self, eu);
-                }
-                catch (ArgumentOutOfRangeException) {
-                    Debug.Log("AOORE - EMPTY");
-                }
-            };
         }
+        
 
         private void RainWorldOnStart(On.RainWorld.orig_Start orig, RainWorld self) {
             On.WorldLoader.ctor += WorldLoaderOnCtor;

@@ -45,9 +45,7 @@ namespace EchoExtender {
                     string settingsPath = region + Path.DirectorySeparatorChar + "echoSettings.txt";
                     EchoSettings settings = File.Exists(settingsPath) ? EchoExtender.EchoSettings.FromFile(settingsPath) : EchoExtender.EchoSettings.Default;
                     if (EchoIDExists(regionShort)) {
-                        Debug.Log("[Echo Extender : Warning] Region " + regionShort + " already has an echo assigned, overwriting!");
-                        if (EchoConversations.TryAdd(GetConversationID(regionShort), conversationText)) continue;
-                        EchoConversations[GetConversationID(regionShort)] = conversationText;
+                        Debug.Log("[Echo Extender : Warning] Region " + regionShort + " already has an echo assigned, skipping!");
                     }
                     else {
                         EnumExtender.AddDeclaration(typeof(GhostWorldPresence.GhostID), regionShort);
