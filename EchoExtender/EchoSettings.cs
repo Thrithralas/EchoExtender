@@ -26,25 +26,32 @@ namespace EchoExtender {
                     switch (split[0].Trim().ToLower()) {
                         case "size":
                             settings.EchoSizeMultiplier = float.Parse(split[1]);
+                            Debug.Log("[Echo Extender : Info] Settings size multiplier to " + settings.EchoSizeMultiplier);
                             break;
                         case "radius":
                             settings.EffectRadius = float.Parse(split[1]);
+                            Debug.Log("[Echo Extender : Info] Settings effect radius to " + settings.EffectRadius);
                             break;
                         case "priming":
                             settings.RequirePriming = bool.Parse(split[1]);
+                            Debug.Log(settings.RequirePriming ? "[Echo Extender : Info] Enabling priming" : "[Echo Extender : Info] Disabling priming");
                             break;
                         case "minkarma":
                             settings.MinimumKarma = int.Parse(split[1]);
+                            Debug.Log("[Echo Extender : Info] Setting minimum karma to " + settings.MinimumKarma);
                             break;
                         case "minkarmacap":
                             settings.MinimumKarmaCap = int.Parse(split[1]);
+                            Debug.Log("[Echo Extender : Info] Setting minimum karma cap to " + settings.MinimumKarmaCap);
                             break;
                         case "difficulties":
                             settings.SpawnOnDifficulty = split[1].Split(',').Select(s => int.Parse(s.Trim())).ToArray();
+                            Debug.Log("[Echo Extender : Info] Difficulties set to " + string.Join(", ", settings.SpawnOnDifficulty.Select(i => i.ToString()).ToArray()));
                             break;
                         case "echosong":
                             string trimmed = split[1].Trim();
                             settings.EchoSong = CRSEchoParser.EchoSongs.TryGetValue(trimmed, out string song) ? song : trimmed;
+                            Debug.Log("[Echo Extender : Info] Setting song to " + settings.EchoSong);
                             break;
                     }
                 }

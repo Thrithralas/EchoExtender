@@ -67,7 +67,12 @@ namespace EchoExtender {
             var result = orig(ghostid, karma, karmacap, ghostpreviouslyencountered, playingasred);
             if (!CRSEchoParser.ExtendedEchoIDs.Contains(ghostid)) return result;
             EchoSettings settings = CRSEchoParser.EchoSettings[ghostid];
-            return settings.SpawnOnDifficulty.Contains(GameInstance?.StoryCharacter ?? 0) && karmacap >= settings.MinimumKarmaCap - 1 && karma >= settings.MinimumKarma - 1 && ghostpreviouslyencountered >= (settings.RequirePriming ? 1 : 0);
+            Debug.Log("[Echo Extender : Info] Difficulty Condition : " + (settings.SpawnOnDifficulty.Contains(GameInstance.StoryCharacter) ? "Met" : "Not Met"));
+            Debug.Log("[Echo Extender : Info] Karma Cap Condition : " + (karmacap >= settings.MinimumKarmaCap - 1 ? "Met" : "Not Met"));
+            Debug.Log("[Echo Extender : Info] Karma Condition : " + (karma >= settings.MinimumKarma - 1 ? "Met" : "Not Met"));
+            Debug.Log("[Echo Extender : Info] Priming Condition : " + (ghostpreviouslyencountered >= (settings.RequirePriming ? 1 : 0) ? "Met" : "Not Met"));
+            Debug.Log("[Echo Extender : Info] Echo Visit Count : " + ghostpreviouslyencountered);
+            return settings.SpawnOnDifficulty.Contains(GameInstance.StoryCharacter) && karmacap >= settings.MinimumKarmaCap - 1 && karma >= settings.MinimumKarma - 1 && ghostpreviouslyencountered >= (settings.RequirePriming ? 1 : 0) && ghostpreviouslyencountered < 2;
         }
 
         private void GhostConversationOnAddEvents(On.GhostConversation.orig_AddEvents orig, GhostConversation self) {
