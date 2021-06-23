@@ -95,6 +95,7 @@ namespace EchoExtender {
 
         private void GhostOnStartConversation(On.Ghost.orig_StartConversation orig, Ghost self) {
             orig(self);
+            if (!CRSEchoParser.ExtendedEchoIDs.Contains(self.worldGhost.ghostID)) return;
             string echoRegionString = self.worldGhost.ghostID.ToString();
             self.currentConversation = new GhostConversation(CRSEchoParser.GetConversationID(echoRegionString), self, self.room.game.cameras[0].hud.dialogBox);
         }
@@ -106,7 +107,7 @@ namespace EchoExtender {
 
         private void GhostWorldPresenceOnCtor(On.GhostWorldPresence.orig_ctor orig, GhostWorldPresence self, World world, GhostWorldPresence.GhostID ghostid) {
             orig(self, world, ghostid);
-            if (self.ghostRoom is null) {
+            if (self.ghostRoom is null && CRSEchoParser.ExtendedEchoIDs.Contains(self.ghostID)) {
                 string region = ghostid.ToString();
                 self.ghostRoom = CRSEchoParser.EchoLocations.ContainsKey(region) ? world.GetAbstractRoom(CRSEchoParser.EchoLocations[region]) : world.abstractRooms[0];
                 self.songName = CRSEchoParser.EchoSettings.ContainsKey(ghostid) ? CRSEchoParser.EchoSettings[ghostid].EchoSong : EchoSettings.Default.EchoSong;
