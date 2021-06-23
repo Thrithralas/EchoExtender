@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using BepInEx;
@@ -9,7 +8,7 @@ using UnityEngine;
 namespace EchoExtender {
     
 
-    [BepInPlugin("com.rainworldgame.echoextender.plugin", "Echo Extender", "0.1")]
+    [BepInPlugin("com.rainworldgame.echoextender.plugin", "Echo Extender", "0.8")]
     public class EchoExtenderModBase : BaseUnityPlugin {
 
 
