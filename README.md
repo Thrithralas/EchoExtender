@@ -6,7 +6,18 @@
 <li>EnumExtender by PasteBee</li>
 <li>CustomRegionSupport by Garrakx</li>
 <h3>Adding an Echo</h3>
-First, place a <code>GhostSpot</code> object in the room you wish for your Echo to spawn. Navigate to <code>/Mods/CustomResources/YourMod/World/Regions/XX</code> and add a <code>echoConv.txt</code> file. The contents of this while will determine what the Echo says, for formatting see the Unique Data Pearl guide for CRS. (NOTE: The only exception here, is that you do not need an ID to start with like 0-##)
+First, place a <code>GhostSpot</code> object in the room you wish for your Echo to spawn. Navigate to <code>/Mods/CustomResources/YourMod/World/Regions/XX</code> and add a <code>echoConv.txt</code> file. The contents of this while will determine what the Echo says, for formatting see the Unique Data Pearl guide for CRS. (NOTE: The only exception here, is that you do not need an ID to start with like 0-##) Example:
+<pre><code>
+This is a test line<LINE>This is on a new line!
+
+(0,1)Surv & Monk exclusive Dialogue
+
+(0,2)Surv & Hunter exclusive Dialogue
+
+(1,2)Monk & Hunter exclusive Dialogue
+
+New dialogue box!
+</code></pre>
 <h3>Conditional Dialogue</h3>
 Similarly to when adding creatures, adding tags like <code>(0)</code>, <code>(1,2)</code> and so on will make that line of dialogue only appear on a specific difficulty
 <h3>Echo Settings</h3>
