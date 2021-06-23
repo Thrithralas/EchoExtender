@@ -112,6 +112,7 @@ namespace EchoExtender {
                 self.ghostRoom = CRSEchoParser.EchoLocations.ContainsKey(region) ? world.GetAbstractRoom(CRSEchoParser.EchoLocations[region]) : world.abstractRooms[0];
                 self.songName = CRSEchoParser.EchoSettings.ContainsKey(ghostid) ? CRSEchoParser.EchoSettings[ghostid].EchoSong : EchoSettings.Default.EchoSong;
             }
+            
         }
 
         private void GhostOnCtor(On.Ghost.orig_ctor orig, Ghost self, Room room, PlacedObject placedobject, GhostWorldPresence worldghost) {
