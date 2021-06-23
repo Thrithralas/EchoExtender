@@ -33,26 +33,26 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\Thrith\Desktop\Rain World Mod Testing\Water Reservoir (CRS Compliant)\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\Resources\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx, Version=5.0.1.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\CreaturePainter\CreaturePainter\Dependencies\BepInEx.dll</HintPath>
+          <HintPath>..\Resources\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="EnumExtender, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\Thrith\Desktop\Rain World Mod Testing\Water Reservoir (CRS Compliant)\Mods\EnumExtender.dll</HintPath>
+          <HintPath>..\Resources\EnumExtender.dll</HintPath>
         </Reference>
         <Reference Include="HOOKS-Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\CreaturePainter\CreaturePainter\Dependencies\HOOKS-Assembly-CSharp.dll</HintPath>
+          <HintPath>..\Resources\HOOKS-Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Partiality, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\Thrith\Desktop\Rain World Mod Testing\Water Reservoir (CRS Compliant)\BepInEx\plugins\PartialityWrapper\Partiality.dll</HintPath>
+          <HintPath>..\Resources\Partiality.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\CreaturePainter\CreaturePainter\Dependencies\UnityEngine.dll</HintPath>
+          <HintPath>..\Resources\UnityEngine.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
