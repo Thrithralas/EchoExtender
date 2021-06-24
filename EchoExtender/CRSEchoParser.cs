@@ -41,7 +41,12 @@ namespace EchoExtender {
             string crsInstallations = Custom.RootFolderDirectory() + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "CustomResources";
             foreach (var crsPack in Directory.GetDirectories(crsInstallations)) {
                 Debug.Log("[Echo Extender : Info] Checking pack " + crsPack.Split(Path.DirectorySeparatorChar).Last() + " for custom Echoes");
+                if (!CustomRegions.Mod.CustomWorldMod.activatedPacks.ContainsKey(crsPack.Split(Path.DirectorySeparatorChar).Last())) {
+                    Debug.Log("[Echo Extender : Info] CRS Pack is disabled, skipping");
+                    continue;
+                }
                 string regions = crsPack + Path.DirectorySeparatorChar + "World" + Path.DirectorySeparatorChar + "Regions";
+                if (!Directory.Exists(regions)) continue;
                 foreach (var region in Directory.GetDirectories(regions)) {
                     string regionShort = region.Split(Path.DirectorySeparatorChar).Last();
                     Debug.Log("[Echo Extender : Info] Found region " + regionShort + "! Checking for Echo.");

@@ -38,6 +38,9 @@
         <Reference Include="BepInEx, Version=5.0.1.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Resources\BepInEx.dll</HintPath>
         </Reference>
+        <Reference Include="CustomRegions, Version=0.8.41.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\Thrith\Desktop\Rain World Mod Testing\Water Reservoir (CRS Compliant)\Mods\CustomRegions.dll</HintPath>
+        </Reference>
         <Reference Include="EnumExtender, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\Resources\EnumExtender.dll</HintPath>
         </Reference>

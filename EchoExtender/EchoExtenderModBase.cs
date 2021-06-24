@@ -8,7 +8,7 @@ using UnityEngine;
 namespace EchoExtender {
     
 
-    [BepInPlugin("com.rainworldgame.echoextender.plugin", "Echo Extender", "0.8")]
+    [BepInPlugin("com.rainworldgame.echoextender.plugin", "Echo Extender", "0.9")]
     public class EchoExtenderModBase : BaseUnityPlugin {
 
 
@@ -47,8 +47,12 @@ namespace EchoExtender {
         }
 
         private void WorldLoaderOnCtor(On.WorldLoader.orig_ctor orig, object self, RainWorldGame game, int playercharacter, bool singleroomworld, string worldname, Region region, RainWorldGame.SetupValues setupvalues) {
-            orig(self, game, playercharacter, singleroomworld, worldname, region, setupvalues);
-            CRSEchoParser.GetEchoLocationInRegion(region.name);
+            orig(self, game, playercharacter, singleroomworld, name, region, setupvalues);
+            if (region is null) {
+                Debug.Log("[Echo Extender : Warning] Region is NULL, skipping getting echo location.");
+            }
+            else CRSEchoParser.GetEchoLocationInRegion(region.name);
+            if (game is null) return;
             GameInstance = game;
         }
 
