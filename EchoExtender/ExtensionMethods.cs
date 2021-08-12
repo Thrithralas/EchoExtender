@@ -14,5 +14,18 @@ namespace EchoExtender {
                 return false;
             }
         }
+
+        public static string[] SplitAndREE(this string target, string seperator) => target.Split(new[] { seperator }, StringSplitOptions.RemoveEmptyEntries);
+
+        public static void AddMultiple<TKey, TValue>(this Dictionary<TKey, TValue> dict, TValue value, params TKey[] keys) {
+            dict.AddMultiple(value, ieKeys: keys);
+        }
+
+        public static void AddMultiple<TKey, TValue>(this Dictionary<TKey, TValue> dict, TValue value, IEnumerable<TKey> ieKeys) {
+            foreach (TKey key in ieKeys) {
+                dict.TryAdd(key, value);
+            }
+        }
     }
+
 }

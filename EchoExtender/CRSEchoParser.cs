@@ -38,6 +38,43 @@ namespace EchoExtender {
         
         // ReSharper disable once InconsistentNaming
         public static void LoadAllCRSPacks() {
+            foreach (var kvp in CustomRegions.Mod.CustomWorldMod.activatedPacks) {
+                Debug.Log($"[Echo Extender : Info] Checking pack {kvp.Key} for Echo.");
+                var resPath = CustomRegions.Mod.CustomWorldMod.resourcePath + kvp.Value + Path.DirectorySeparatorChar;
+                var regPath = resPath + Path.DirectorySeparatorChar + "World" + Path.DirectorySeparatorChar + "Regions";
+                if (Directory.Exists(regPath)) {
+                    foreach (var region in Directory.GetDirectories(regPath)) {
+                        string regInitials = region.Substring(region.Length - 2);
+                        string convPath = region + Path.DirectorySeparatorChar + "echoConv.txt";
+                        Debug.Log($"[Echo Extender : Info] Checking region {regInitials} for Echo.");
+                        if (File.Exists(convPath)) {
+                            string convText = File.ReadAllText(convPath);
+                            string settingsPath = region + Path.DirectorySeparatorChar + "echoSettings.txt";
+                            var settings = File.Exists(settingsPath) ? EchoExtender.EchoSettings.FromFile(settingsPath) : EchoExtender.EchoSettings.Default;
+                            if (!EchoIDExists(regInitials)) {
+                                EnumExtender.AddDeclaration(typeof(GhostWorldPresence.GhostID), regInitials);
+                                EnumExtender.AddDeclaration(typeof(Conversation.ID), "Ghost_" + regInitials);
+                                EnumExtender.ExtendEnumsAgain();
+                                ExtendedEchoIDs.Add(GetEchoID(regInitials));
+                                EchoConversations.Add(GetConversationID(regInitials), convText);
+                                Debug.Log("[Echo Extender : Info] Added conversation for echo in region " + regInitials);
+                            }
+                            else {
+                                Debug.Log("[Echo Extender : Warning] An echo for this region already exists, skipping.");
+                            }
+
+                            EchoSettings.TryAdd(GetEchoID(regInitials), settings);
+                        }
+                        else {
+                            Debug.Log("[Echo Extender : Info] No conversation file found!");
+                        }
+                    }
+                }
+                else {
+                    Debug.Log("[Echo Extender : Info] Pack doesn't have a regions folder, skipping.");
+                }
+            }
+            /*
             string crsInstallations = Custom.RootFolderDirectory() + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "CustomResources";
             foreach (var crsPack in Directory.GetDirectories(crsInstallations)) {
                 Debug.Log("[Echo Extender : Info] Checking pack " + crsPack.Split(Path.DirectorySeparatorChar).Last() + " for custom Echoes");
@@ -74,12 +111,25 @@ namespace EchoExtender {
 
 
                 }
-            }
+            }*/
         }
 
         public static void GetEchoLocationInRegion(string regionShort) {
-            if (!EchoIDExists(regionShort) || !ExtendedEchoIDs.Contains(GetEchoID(regionShort))) return;
-            string crsInstallations = Custom.RootFolderDirectory() + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "CustomResources";
+            if (!EchoIDExists(regionShort) || !ExtendedEchoIDs.Contains(GetEchoID(regionShort))) return; ;
+            foreach (var kvp in CustomRegions.Mod.CustomWorldMod.activatedPacks) {
+                var resPath = CustomRegions.Mod.CustomWorldMod.resourcePath + kvp.Key;
+                var regPath = resPath + Path.DirectorySeparatorChar + "World" + Path.DirectorySeparatorChar + "Regions" + Path.DirectorySeparatorChar + regionShort + Path.DirectorySeparatorChar + "Rooms";
+                if (Directory.Exists(regPath)) {
+                    foreach (var file in Directory.GetFiles(regPath)) {
+                        if (!file.EndsWith("_Settings.txt")) continue;
+                        var content = File.ReadAllText(file);
+                        if (content.Contains("GhostSpot")) {
+                            EchoLocations.TryAdd(regionShort, file.Split(Path.DirectorySeparatorChar).Last().Replace("_Settings.txt", ""));
+                        }
+                    }
+                }
+            }
+            /*string crsInstallations = CustomRegions.Mod.CustomWorldMod.resourcePath;
             foreach (var crsPack in Directory.GetDirectories(crsInstallations)) {
                 Debug.Log("[Echo Extender : Info] Checking pack " + crsPack.Split(Path.DirectorySeparatorChar).Last() + " for Echo location");
                 string region = crsPack + Path.DirectorySeparatorChar + "World" + Path.DirectorySeparatorChar + "Regions" + Path.DirectorySeparatorChar + regionShort;
@@ -98,7 +148,7 @@ namespace EchoExtender {
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }
