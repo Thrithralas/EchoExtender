@@ -27,3 +27,11 @@ radius : 4
 echosong : SH
 </code></pre>
 Modify the values according to how you want your Echo to behave. Delaying Echo spawn with minKarma and minKarmaCap may still cause the Echo's fade to play the first time around the player visits
+<h3>Conditional Echo Settings</h3>
+Echo settings have been updated to accept vanilla-like difficulty restrictions:
+<pre><code>(0,1)priming : true
+(2)priming : false
+</pre></code>
+This would make the echo not require priming when playing with Hunter.
+<h3>Defaults Update</h3>
+Echo defaults have been updated to more closely resemble vanilla echoes. Minimum karma requirement is now relative to the karma cap, distance is 4000 map units and priming is required for Survivor and Monk.
