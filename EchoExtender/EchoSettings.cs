@@ -11,6 +11,7 @@ namespace EchoExtender {
         public Dictionary<int, bool> RequirePriming;
         public Dictionary<int, int> MinimumKarma;
         public Dictionary<int, int> MinimumKarmaCap;
+        public Dictionary<int, float> DefaultFlip;
         public int[] SpawnOnDifficulty;
         public Dictionary<int, string> EchoSong;
 
@@ -41,6 +42,16 @@ namespace EchoExtender {
             return Default.EchoSong[diff];
         }
 
+        public bool SpawnOnThisDifficulty(int diff) {
+            if (SpawnOnDifficulty.Length > 0) return SpawnOnDifficulty.Contains(diff);
+            return Default.SpawnOnDifficulty.Contains(diff);
+        }
+
+        public float GetDefaultFlip(int diff) {
+            if (DefaultFlip.ContainsKey(diff)) return DefaultFlip[diff];
+            return Default.DefaultFlip[diff];
+        }
+
         public static EchoSettings Default;
 
         static EchoSettings() {
@@ -53,6 +64,7 @@ namespace EchoExtender {
             Default.SpawnOnDifficulty = new[] { 0, 1, 2 };
             Default.EchoSong.AddMultiple("NA_32 - Else1", 0, 1, 2);
             Default.EchoSizeMultiplier.AddMultiple(1, 0, 1, 2);
+            Default.DefaultFlip.AddMultiple(0, 0, 1, 2);
         }
 
         public static EchoSettings Empty => new EchoSettings() {
@@ -62,7 +74,8 @@ namespace EchoExtender {
             MinimumKarmaCap = new Dictionary<int, int>(),
             RequirePriming = new Dictionary<int, bool>(),
             EchoSong = new Dictionary<int, string>(),
-            SpawnOnDifficulty = new int[3],
+            SpawnOnDifficulty = new int[0],
+            DefaultFlip = new Dictionary<int, float>()
         };
         public static EchoSettings FromFile(string path) {
             Debug.Log("[Echo Extender : Info] Found settings file: " + path);
@@ -112,7 +125,10 @@ namespace EchoExtender {
                             string result = CRSEchoParser.EchoSongs.TryGetValue(trimmed, out string song) ? song : trimmed;
                             if (difficulties.Count == 0) settings.EchoSong.AddMultiple(result, 0, 1, 2);
                             else settings.EchoSong.AddMultiple(result, difficulties);
-                            Debug.Log("[Echo Extender : Info] Setting song to " + settings.EchoSong);
+                            break;
+                        case "defaultflip":
+                            if (difficulties.Count == 0) settings.DefaultFlip.AddMultiple(float.Parse(split[1]), 0, 1, 2);
+                            else settings.DefaultFlip.AddMultiple(float.Parse(split[1]), difficulties);
                             break;
                     }
                 }
