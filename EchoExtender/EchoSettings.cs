@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace EchoExtender {
     public struct EchoSettings {
+        public Dictionary<int, string> EchoRoom;
         public Dictionary<int, float> EchoSizeMultiplier;
         public Dictionary<int, float> EffectRadius;
         public Dictionary<int, bool> RequirePriming;
@@ -14,6 +15,11 @@ namespace EchoExtender {
         public Dictionary<int, float> DefaultFlip;
         public int[] SpawnOnDifficulty;
         public Dictionary<int, string> EchoSong;
+
+        public string GetEchoRoom(int diff) {
+            if (EchoRoom.ContainsKey(diff)) return EchoRoom[diff];
+            return "";
+        }
 
         public float GetSizeMultiplier(int diff) {
             if (EchoSizeMultiplier.ContainsKey(diff)) return EchoSizeMultiplier[diff];
@@ -53,9 +59,9 @@ namespace EchoExtender {
         }
 
         public static EchoSettings Default;
-
         static EchoSettings() {
             Default = Empty;
+            Default.EchoRoom.AddMultiple("", 0, 1, 2);
             Default.RequirePriming.AddMultiple(true, 0, 1);
             Default.RequirePriming.Add(2, false);
             Default.EffectRadius.AddMultiple(4, 0, 1, 2);
@@ -67,7 +73,11 @@ namespace EchoExtender {
             Default.DefaultFlip.AddMultiple(0, 0, 1, 2);
         }
 
+        // Hook-friendly
+        public static List<int> DefaultDifficulties() => new() { 0, 1, 2 };
+
         public static EchoSettings Empty => new EchoSettings() {
+            EchoRoom = new(),
             EchoSizeMultiplier = new Dictionary<int, float>(),
             EffectRadius = new Dictionary<int, float>(),
             MinimumKarma = new Dictionary<int, int>(),
@@ -82,7 +92,7 @@ namespace EchoExtender {
             string[] rows = File.ReadAllLines(path);
             EchoSettings settings = Empty;
             foreach (string row in rows) {
-                if (row.StartsWith("#")) continue;
+                if (row.StartsWith("#") || row.StartsWith("//")) continue;
                 try {
                     string[] split = row.Split(':');
                     string pass = split[0];
@@ -96,26 +106,25 @@ namespace EchoExtender {
                             difficulties.Add(result);
                         }
                     }
+                    else difficulties = DefaultDifficulties();
                     switch (pass.Trim().ToLower()) {
+                        case "room":
+                            settings.EchoRoom.AddMultiple(split[1].Trim(), difficulties);
+                            break;
                         case "size":
-                            if (difficulties.Count == 0) settings.EchoSizeMultiplier.AddMultiple(float.Parse(split[1]), 0, 1, 2);
-                            else settings.EchoSizeMultiplier.AddMultiple(float.Parse(split[1]), difficulties);
+                            settings.EchoSizeMultiplier.AddMultiple(float.Parse(split[1]), difficulties);
                             break;
                         case "radius":
-                            if (difficulties.Count == 0) settings.EffectRadius.AddMultiple(float.Parse(split[1]), 0, 1, 2);
-                            else settings.EffectRadius.AddMultiple(float.Parse(split[1]), difficulties);
+                            settings.EffectRadius.AddMultiple(float.Parse(split[1]), difficulties);
                             break;
                         case "priming":
-                            if (difficulties.Count == 0) settings.RequirePriming.AddMultiple(bool.Parse(split[1]), 0, 1, 2);
-                            else settings.RequirePriming.AddMultiple(bool.Parse(split[1]), difficulties);
+                            settings.RequirePriming.AddMultiple(bool.Parse(split[1]), difficulties);
                             break;
                         case "minkarma":
-                            if (difficulties.Count == 0) settings.MinimumKarma.AddMultiple(int.Parse(split[1]), 0, 1, 2);
-                            else settings.MinimumKarma.AddMultiple(int.Parse(split[1]), difficulties);
+                            settings.MinimumKarma.AddMultiple(int.Parse(split[1]), difficulties);
                             break;
                         case "minkarmacap":
-                            if (difficulties.Count == 0) settings.MinimumKarmaCap.AddMultiple(int.Parse(split[1]), 0, 1, 2);
-                            else settings.MinimumKarmaCap.AddMultiple(int.Parse(split[1]), difficulties);
+                            settings.MinimumKarmaCap.AddMultiple(int.Parse(split[1]), difficulties);
                             break;
                         case "difficulties":
                             settings.SpawnOnDifficulty = split[1].Split(',').Select(s => int.Parse(s.Trim())).ToArray();
@@ -123,12 +132,10 @@ namespace EchoExtender {
                         case "echosong":
                             string trimmed = split[1].Trim();
                             string result = CRSEchoParser.EchoSongs.TryGetValue(trimmed, out string song) ? song : trimmed;
-                            if (difficulties.Count == 0) settings.EchoSong.AddMultiple(result, 0, 1, 2);
-                            else settings.EchoSong.AddMultiple(result, difficulties);
+                            settings.EchoSong.AddMultiple(result, difficulties);
                             break;
                         case "defaultflip":
-                            if (difficulties.Count == 0) settings.DefaultFlip.AddMultiple(float.Parse(split[1]), 0, 1, 2);
-                            else settings.DefaultFlip.AddMultiple(float.Parse(split[1]), difficulties);
+                            settings.DefaultFlip.AddMultiple(float.Parse(split[1]), difficulties);
                             break;
                     }
                 }
