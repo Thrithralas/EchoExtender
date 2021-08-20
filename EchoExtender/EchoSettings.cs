@@ -95,16 +95,17 @@ namespace EchoExtender {
                 if (row.StartsWith("#") || row.StartsWith("//")) continue;
                 try {
                     string[] split = row.Split(':');
-                    string pass = split[0];
+                    string pass = split[0].Trim();
                     List<int> difficulties = new List<int>();
                     if (pass.StartsWith("(")) {
-                        foreach (string rawNum in pass.Substring(1, pass.IndexOf(')')).SplitAndREE(",")) {
+                        foreach (string rawNum in pass.Substring(1, pass.IndexOf(')')-1).SplitAndREE(",")) {
                             if (!int.TryParse(rawNum, out int result)) {
-                                Debug.Log("[Echo Extender : Warning] Found a non-integer difficulty! Skipping");
+                                Debug.Log($"[Echo Extender : Warning] Found a non-integer difficulty '{rawNum}'! Skipping : " + row);
                                 continue;
                             }
                             difficulties.Add(result);
                         }
+                        pass = pass.Substring(pass.IndexOf(")")+1);
                     }
                     else difficulties = DefaultDifficulties();
                     switch (pass.Trim().ToLower()) {
@@ -136,6 +137,9 @@ namespace EchoExtender {
                             break;
                         case "defaultflip":
                             settings.DefaultFlip.AddMultiple(float.Parse(split[1]), difficulties);
+                            break;
+                        default:
+                            Debug.Log($"[Echo Extender : Warning] Setting '{pass.Trim().ToLower()}' not found! Skipping : " + row);
                             break;
                     }
                 }
