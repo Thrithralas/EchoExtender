@@ -30,19 +30,22 @@ namespace EchoExtender {
             if (EffectRadius.ContainsKey(diff)) return EffectRadius[diff];
             return Default.EffectRadius[diff];
         }
-        
+
         public bool GetPriming(int diff) {
             if (RequirePriming.ContainsKey(diff)) return RequirePriming[diff];
             return Default.RequirePriming[diff];
         }
+
         public int GetMinimumKarma(int diff) {
-            if (MinimumKarma.ContainsKey(diff)) return MinimumKarma[diff];
-            return Default.MinimumKarma[diff];
+            if (MinimumKarma.ContainsKey(diff)) return MinimumKarma[diff] - 1;
+            return Default.MinimumKarma[diff] - 1;
         }
+
         public int GetMinimumKarmaCap(int diff) {
-            if (MinimumKarmaCap.ContainsKey(diff)) return MinimumKarmaCap[diff];
-            return Default.MinimumKarmaCap[diff];
+            if (MinimumKarmaCap.ContainsKey(diff)) return MinimumKarmaCap[diff] - 1;
+            return Default.MinimumKarmaCap[diff] - 1;
         }
+
         public string GetEchoSong(int diff) {
             if (EchoSong.ContainsKey(diff)) return EchoSong[diff];
             return Default.EchoSong[diff];
@@ -59,6 +62,7 @@ namespace EchoExtender {
         }
 
         public static EchoSettings Default;
+
         static EchoSettings() {
             Default = Empty;
             Default.EchoRoom.AddMultiple("", 0, 1, 2);
@@ -74,7 +78,7 @@ namespace EchoExtender {
         }
 
         // Hook-friendly
-        public static List<int> DefaultDifficulties() => new() { 0, 1, 2 };
+        public static List<int> DefaultDifficulties() => new List<int> { 0, 1, 2 };
 
         public static EchoSettings Empty => new EchoSettings() {
             EchoRoom = new(),
@@ -87,6 +91,7 @@ namespace EchoExtender {
             SpawnOnDifficulty = new int[0],
             DefaultFlip = new Dictionary<int, float>()
         };
+
         public static EchoSettings FromFile(string path) {
             Debug.Log("[Echo Extender : Info] Found settings file: " + path);
             string[] rows = File.ReadAllLines(path);
@@ -98,16 +103,19 @@ namespace EchoExtender {
                     string pass = split[0].Trim();
                     List<int> difficulties = new List<int>();
                     if (pass.StartsWith("(")) {
-                        foreach (string rawNum in pass.Substring(1, pass.IndexOf(')')-1).SplitAndREE(",")) {
+                        foreach (string rawNum in pass.Substring(1, pass.IndexOf(')') - 1).SplitAndREE(",")) {
                             if (!int.TryParse(rawNum, out int result)) {
                                 Debug.Log($"[Echo Extender : Warning] Found a non-integer difficulty '{rawNum}'! Skipping : " + row);
                                 continue;
                             }
+
                             difficulties.Add(result);
                         }
-                        pass = pass.Substring(pass.IndexOf(")")+1);
+
+                        pass = pass.Substring(pass.IndexOf(")", StringComparison.Ordinal) + 1);
                     }
                     else difficulties = DefaultDifficulties();
+
                     switch (pass.Trim().ToLower()) {
                         case "room":
                             settings.EchoRoom.AddMultiple(split[1].Trim(), difficulties);
@@ -147,9 +155,8 @@ namespace EchoExtender {
                 catch (Exception) {
                     Debug.Log("[Echo Extender : Error] Failed to parse line " + row);
                 }
-                
             }
-            
+
             return settings;
         }
 
